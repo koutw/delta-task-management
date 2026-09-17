@@ -1,0 +1,19 @@
+# Gradle & Java
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Node & Frontend
+node_modules/
+dist/
+.vite/
+*.local
+
+# System
+.DS_Store
+*.log
