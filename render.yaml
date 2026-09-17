@@ -1,0 +1,32 @@
+services:
+  # 後端 Web Service (Spring Boot 3)
+  - type: web
+    name: delta-task-backend
+    env: java
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: ./gradlew bootJar
+    startCommand: java -jar build/libs/backend-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: JAVA_VERSION
+        value: "17"
+
+  # 前端 Static Site (Vue 3 + Vite)
+  - type: static
+    name: delta-task-frontend
+    region: singapore
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: delta-task-backend
+          property: url
