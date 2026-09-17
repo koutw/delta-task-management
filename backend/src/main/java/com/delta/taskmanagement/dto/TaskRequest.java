@@ -1,13 +1,11 @@
 package com.delta.taskmanagement.dto;
 
-import com.delta.taskmanagement.enums.Priority;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class TaskUpdateRequest {
+public class TaskRequest {
 
     @NotBlank
     @Size(max = 255)
@@ -15,9 +13,7 @@ public class TaskUpdateRequest {
 
     private String description;
 
-    @NotNull
-    private Priority priority;
+    private boolean completed = false;
 
-    @NotNull
     private Long version;
 }

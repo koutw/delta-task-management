@@ -1,7 +1,5 @@
 package com.delta.taskmanagement.entity;
 
-import com.delta.taskmanagement.enums.Priority;
-import com.delta.taskmanagement.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,15 +25,9 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private TaskStatus status = TaskStatus.TODO;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    @Builder.Default
-    private Priority priority = Priority.MEDIUM;
+    private boolean completed = false;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

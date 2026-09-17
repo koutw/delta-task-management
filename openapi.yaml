@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Delta Task Management API
+  title: Task Management API
   description: 任務管理系統 RESTful API 規格文件 (Task Management System RESTful API Specification)
   version: 1.0.0
 servers:
@@ -15,50 +15,16 @@ paths:
       tags:
         - Tasks
       summary: 查詢任務列表
-      description: 依條件篩選與排序任務列表 (List tasks with optional filtering and sorting)
+      description: 依完成狀態篩選與排序任務列表 (List tasks with optional completed filter)
       operationId: listTasks
       parameters:
-        - name: status
+        - name: completed
           in: query
-          description: 依任務狀態篩選 (Filter by task status)
+          description: 依任務完成狀態篩選 (Filter by task completion status)
           required: false
           schema:
-            $ref: '#/components/schemas/TaskStatus'
-        - name: priority
-          in: query
-          description: 依優先級篩選 (Filter by priority)
-          required: false
-          schema:
-            $ref: '#/components/schemas/Priority'
-        - name: keyword
-          in: query
-          description: 關鍵字模糊搜尋（標題與描述）(Fuzzy search on title and description)
-          required: false
-          schema:
-            type: string
-            example: 驗證
-        - name: sortBy
-          in: query
-          description: 排序欄位 (Field to sort by)
-          required: false
-          schema:
-            type: string
-            enum:
-              - createdAt
-              - priority
-            default: createdAt
-            example: createdAt
-        - name: sortDirection
-          in: query
-          description: 排序方向 (Sort direction)
-          required: false
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: DESC
-            example: DESC
+            type: boolean
+            example: false
       responses:
         '200':
           description: 成功取得任務列表 (Successfully retrieved task list)
@@ -80,7 +46,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskCreateRequest'
+              $ref: '#/components/schemas/TaskRequest'
       responses:
         '201':
           description: 任務建立成功 (Task created successfully)
@@ -129,7 +95,7 @@ paths:
       tags:
         - Tasks
       summary: 更新指定任務
-      description: 更新任務完整內容，支援樂觀鎖機制 (Update full task details with optimistic locking)
+      description: 更新任務內容或完成狀態，支援樂觀鎖機制 (Update task content or completion status with optimistic locking)
       operationId: updateTask
       parameters:
         - name: id
@@ -146,7 +112,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskUpdateRequest'
+              $ref: '#/components/schemas/TaskRequest'
       responses:
         '200':
           description: 任務更新成功 (Task updated successfully)
@@ -198,78 +164,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /api/v1/tasks/{id}/status:
-    patch:
-      tags:
-        - Tasks
-      summary: 更新任務狀態
-      description: 單獨更新指定任務的狀態，支援樂觀鎖機制 (Update task status with optimistic locking)
-      operationId: updateTaskStatus
-      parameters:
-        - name: id
-          in: path
-          description: 任務 ID (Task ID)
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-      requestBody:
-        description: 更新任務狀態的請求內容 (Task status update request body)
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StatusUpdateRequest'
-      responses:
-        '200':
-          description: 任務狀態更新成功 (Task status updated successfully)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskResponse'
-        '400':
-          description: 請求參數驗證失敗 (Bad Request - Invalid input)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: 找不到指定的任務 (Task not found)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: 版本衝突，資料已被其他人修改 (Version conflict - Optimistic locking failure)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
 components:
   schemas:
-    TaskStatus:
-      type: string
-      description: 任務狀態 (Task Status)
-      enum:
-        - TODO
-        - IN_PROGRESS
-        - COMPLETED
-      example: TODO
-
-    Priority:
-      type: string
-      description: 優先級 (Task Priority)
-      enum:
-        - LOW
-        - MEDIUM
-        - HIGH
-      example: MEDIUM
-
-    TaskCreateRequest:
+    TaskRequest:
       type: object
-      description: 建立任務請求 (Task creation request)
+      description: 任務請求物件 (Task request body for create and update)
       required:
         - title
       properties:
@@ -284,52 +183,15 @@ components:
           nullable: true
           description: 任務詳細描述 (Task description)
           example: 使用 JWT 實作登入與註冊 API
-        priority:
-          allOf:
-            - $ref: '#/components/schemas/Priority'
-          default: MEDIUM
-
-    TaskUpdateRequest:
-      type: object
-      description: 更新任務請求 (Task update request)
-      required:
-        - title
-        - priority
-        - version
-      properties:
-        title:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: 任務標題 (Task title)
-          example: 重構使用者驗證功能
-        description:
-          type: string
-          nullable: true
-          description: 任務詳細描述 (Task description)
-          example: 升級至 Spring Security 6 並整合 OAuth2 登入
-        priority:
-          $ref: '#/components/schemas/Priority'
+        completed:
+          type: boolean
+          description: 任務是否已完成 (Task completion status)
+          example: false
         version:
           type: integer
           format: int64
-          description: 樂觀鎖版本號 (Optimistic lock version)
-          example: 1
-
-    StatusUpdateRequest:
-      type: object
-      description: 更新任務狀態請求 (Status update request)
-      required:
-        - status
-        - version
-      properties:
-        status:
-          $ref: '#/components/schemas/TaskStatus'
-        version:
-          type: integer
-          format: int64
-          description: 樂觀鎖版本號 (Optimistic lock version)
-          example: 1
+          description: 樂觀鎖版本號，更新時使用 (Optimistic lock version for update)
+          example: 0
 
     TaskResponse:
       type: object
@@ -337,8 +199,7 @@ components:
       required:
         - id
         - title
-        - status
-        - priority
+        - completed
         - createdAt
         - updatedAt
         - version
@@ -357,10 +218,10 @@ components:
           nullable: true
           description: 任務詳細描述 (Task description)
           example: 使用 JWT 實作登入與註冊 API
-        status:
-          $ref: '#/components/schemas/TaskStatus'
-        priority:
-          $ref: '#/components/schemas/Priority'
+        completed:
+          type: boolean
+          description: 任務是否已完成 (Task completion status)
+          example: false
         createdAt:
           type: string
           format: date-time
@@ -375,7 +236,7 @@ components:
           type: integer
           format: int64
           description: 樂觀鎖版本號 (Optimistic lock version)
-          example: 1
+          example: 0
 
     ErrorResponse:
       type: object

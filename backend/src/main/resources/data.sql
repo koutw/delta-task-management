@@ -1,5 +1,4 @@
-INSERT INTO tasks (title, description, status, priority, created_at, updated_at, version) VALUES ('Setup project', 'Initialize Spring Boot project', 'COMPLETED', 'HIGH', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
-INSERT INTO tasks (title, description, status, priority, created_at, updated_at, version) VALUES ('Create DB schema', 'Define JPA entities', 'COMPLETED', 'HIGH', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
-INSERT INTO tasks (title, description, status, priority, created_at, updated_at, version) VALUES ('Implement APIs', 'Create REST controllers', 'IN_PROGRESS', 'MEDIUM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
-INSERT INTO tasks (title, description, status, priority, created_at, updated_at, version) VALUES ('Write tests', 'Add unit and integration tests', 'TODO', 'MEDIUM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
-INSERT INTO tasks (title, description, status, priority, created_at, updated_at, version) VALUES ('Deploy app', 'Deploy to cloud provider', 'TODO', 'LOW', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+INSERT INTO tasks (title, description, completed, created_at, updated_at, version) VALUES ('Setup project', 'Initialize Spring Boot project', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+INSERT INTO tasks (title, description, completed, created_at, updated_at, version) VALUES ('Create DB schema', 'Define JPA entities', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+INSERT INTO tasks (title, description, completed, created_at, updated_at, version) VALUES ('Implement APIs', 'Create REST controllers', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+INSERT INTO tasks (title, description, completed, created_at, updated_at, version) VALUES ('Write tests', 'Add unit and integration tests', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
