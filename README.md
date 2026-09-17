@@ -9,7 +9,7 @@ classDiagram
         +String title
         +String description
         +boolean completed
-        +LocalDateTime createdAt
+        +LocalDateTime createdAtgit
         +LocalDateTime updatedAt
         +Long version
     }
