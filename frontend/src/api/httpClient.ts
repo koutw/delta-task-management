@@ -1,4 +1,8 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+let rawBaseUrl = import.meta.env.VITE_API_BASE_URL || ''
+if (rawBaseUrl && !rawBaseUrl.startsWith('http://') && !rawBaseUrl.startsWith('https://')) {
+  rawBaseUrl = `https://${rawBaseUrl}`
+}
+const BASE_URL = rawBaseUrl
 
 interface RequestOptions extends Omit<RequestInit, 'body'> {
   params?: Record<string, string | number | boolean | undefined>
