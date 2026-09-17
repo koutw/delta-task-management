@@ -13,8 +13,9 @@ services:
         value: "17"
 
   # 前端 Static Site (Vue 3 + Vite)
-  - type: static
+  - type: web
     name: delta-task-frontend
+    env: static
     region: singapore
     plan: free
     rootDir: frontend
