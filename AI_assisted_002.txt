@@ -1,0 +1,127 @@
+使用原生的fetch api生成src/api/httpClient.ts裡面的內容，功能要包括http request方法、http response錯誤處理
+下午6:32, 2026/9/16
+
+
+已成功基於原生 Fetch API 實作 
+src/api/httpClient.ts
+ 與相關型別定義 
+src/types/api.ts
+。
+
+💡 核心功能與特色
+原生 Fetch 封裝與完整 HTTP 方法支援
+
+支援 httpClient.get(), httpClient.post(), httpClient.put(), httpClient.patch(), httpClient.delete() 與通用的 request<T>()。
+自動依據 Request Body 類型轉成 JSON 字串，並補全 Content-Type: application/json Header。
+支援 URL Query 查詢參數自動序列化 (params 物件自動轉為 URLSearchParams)。
+完善的 HTTP Response 錯誤處理
+
+HttpError 自訂錯誤類別：包含 status（狀態碼）、statusText、message 以及後端回傳的 data (對應 ApiErrorResponse)。
+狀態碼預設訊息：針對常見的 400、401、403、404、409（版本衝突）、422、500 等 HTTP 狀態碼提供繁體中文友善提示。
+例外安全解析：自動判斷 204 No Content，並保護 JSON/Text Body 的解析流程，避免解析失敗導致程式崩潰。
+逾時與網路異常處理 (Timeout & Network Error)
+
+內建 AbortController 機制，預設逾時時間為 10 秒 (10000ms)，逾時會拋出 408 Request Timeout。
+自動捕捉網路斷線或 Fetch 底層例外並回傳具體的錯誤訊息。
+環境變數 Base URL 支援
+
+支援存取 import.meta.env.VITE_API_BASE_URL 作為全域端點前綴。
+📝 使用範例
+typescript
+
+
+import { httpClient, HttpError } from '@/api/httpClient'
+import type { Task, TaskCreateRequest } from '@/types/task'
+// 1. 取得任務列表 (GET with Query Params)
+async function fetchTasks() {
+  try {
+    const tasks = await httpClient.get<Task[]>('/api/v1/tasks', { status: 'TODO', priority: 'HIGH' })
+    console.log('Task list:', tasks)
+  } catch (error) {
+    if (error instanceof HttpError) {
+      console.error(`[${error.status}] ${error.message}`, error.data)
+    }
+  }
+}
+// 2. 建立新任務 (POST with Body)
+async function createTask(payload: TaskCreateRequest) {
+  try {
+    const newTask = await httpClient.post<Task>('/api/v1/tasks', payload)
+    return newTask
+  } catch (error) {
+    if (error instanceof HttpError && error.status === 400) {
+      console.error('欄位驗證失敗:', error.data)
+    }
+    throw error
+  }
+}
+
+httpClient.ts、taskApi.ts是否有點過度設計了?
+上午2:51
+
+
+是的，對於目前這個單一實體 (Task) 的 MVP 專案來說，httpClient.ts + taskApi.ts 的兩層拆分確實有一點過度設計 (Over-engineered)。
+
+為什麼會覺得過度設計？
+檔案數量多層次：整個專案只有 Task 一種 API 資源，但卻拆成了 httpClient.ts（通用 HTTP 封裝）和 taskApi.ts（Task 領域 API）兩個檔案。
+抽象層過厚：httpClient.ts 寫了 70 多行來處理 fetch 的 Content-Type、JSON 解析防禦、URL 參數拼接、自訂 HttpError 類別，最後只被 taskApi.ts 呼叫 4 個簡單方法（getAll, create, update, delete）。
+為何最初這樣寫？（它的保留價值）
+409 版本衝突 (樂觀鎖)：App.vue 需要拿到 status === 409 來顯示「樂觀鎖衝突」提示並自動重新載入。
+Render.com 部署與 Proxy 相容：自動處理 http:// / https:// Protocol 與 BaseURL。
+簡化建議 (Over-engineering 化解方案)
+可以直接將 httpClient.ts 與 taskApi.ts 合併為單一簡潔的 taskApi.ts 檔案（約 30~40 行），直接使用原生的 fetch 搭配一個極簡的通用 request 處理，保留關鍵的 409 / 404 狀態碼拋出即可。
+
+合併簡化後的 taskApi.ts 範例：
+ts
+
+
+import type { Task, TaskRequest } from '@/types/task'
+let BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+if (BASE_URL && !BASE_URL.startsWith('http')) {
+  BASE_URL = `https://${BASE_URL}`
+}
+const API_URL = `${BASE_URL}/api/v1/tasks`
+export class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message)
+  }
+}
+async function request<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options,
+  })
+  if (res.status === 204) return undefined as T
+  const data = res.headers.get('content-type')?.includes('application/json')
+    ? await res.json()
+    : await res.text()
+  if (!res.ok) {
+    throw new HttpError(res.status, res.statusText)
+  }
+  return data as T
+}
+export const taskApi = {
+  getAll: () => request<Task[]>(API_URL),
+  create: (data: TaskRequest) => request<Task>(API_URL, { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: number, data: TaskRequest) => request<Task>(`${API_URL}/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: number) => request<void>(`${API_URL}/${id}`, { method: 'DELETE' }),
+}
+如果你希望專案更加精簡乾淨，我可以立刻幫你將 httpClient.ts 刪除，並將程式碼重構成上述合併後的單一輕量 taskApi.ts！
+
+上午2:51
+好的，重構成上述合併後的單一輕量 taskApi.ts！
+上午2:53
+
+
+已順利完成重構：
+
+合併 API 邏輯：
+
+刪除 frontend/src/api/httpClient.ts。
+將原生 fetch 封裝與 HttpError 類別直接內嵌至 frontend/src/api/taskApi.ts（總行數精簡至 45 行）。
+更新引用：
+
+修改 App.vue 中的引用為 import { taskApi, HttpError } from '@/api/taskApi'。
+驗證結果：
+
+執行 npm run build（包含 vue-tsc -b 與 vite build）測試，100% 通過（0 錯誤）。

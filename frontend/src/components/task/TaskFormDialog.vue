@@ -4,17 +4,15 @@ import { ref, reactive, watch } from 'vue'
 import type { Task, TaskRequest } from '@/types/task'
 
 const props = defineProps<{
-  editingTask: Task | null
+    editingTask: Task | null
 }>()
-
 const emit = defineEmits<{
   'submit-create': [data: TaskRequest]
   'submit-update': [id: number, data: TaskRequest]
 }>()
-
 const visible = defineModel<boolean>({ default: false })
-const formRef = ref<FormInstance>()
 
+const formRef = ref<FormInstance>()
 const formData = reactive({
   id: null as number | null,
   title: '',
@@ -28,10 +26,11 @@ const rules: FormRules = {
   title: [
     { required: true, message: '請輸入任務標題', trigger: 'blur' },
     { min: 1, max: 255, message: '標題長度需介於 1 至 255 個字元', trigger: 'blur' },
-  ],
+  ]
 }
 
-watch(
+// 欄位初始值設定
+watch (
   () => props.editingTask,
   (task) => {
     if (task) {

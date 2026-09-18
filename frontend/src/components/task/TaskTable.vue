@@ -7,7 +7,6 @@ const props = defineProps<{
   loading: boolean
   isUpdating: (id: number) => boolean
 }>()
-
 const emit = defineEmits<{
   toggle: [task: Task]
   edit: [task: Task]
@@ -23,9 +22,9 @@ const filteredTasks = computed(() => {
   return props.tasks
 })
 
-function formatDate(iso?: string) {
-  if (!iso) return '-'
-  return new Date(iso).toLocaleString('zh-TW', {
+function formatDate(dateString?: string) {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleString('zh-TW', {
     timeZone: 'Asia/Taipei',
     hour12: false,
   })

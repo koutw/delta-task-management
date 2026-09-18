@@ -1,0 +1,147 @@
+我收到了一份功能需求：
+## 功能需求
+此應用程式應允許使用者：
+- 檢視任務
+- 建立任務
+- 修改任務
+- 將任務標記為已完成或未完成
+- 刪除任務
+
+## 技術需求
+- 後端必須使用 **Spring Boot 3**
+- 前端必須使用 **Vue 3**
+- 使用 OpenAPI 規格定義產生你的 API
+
+並由此整理了一份SA文件：
+核心功能
+編號	功能	說明
+1 檢視任務	以列表形式顯示所有任務
+2 建立任務	透過表單建立新任務，含標題（必填）、描述（選填）
+3 修改任務	編輯既有任務的標題、描述
+4 切換狀態	將任務標記為已完成或未完成
+5 刪除任務	刪除任務
+
+
+非功能需求
+1. optimistic lock保證資料正確性、失敗時自動 rollback
+2. 錯誤處理 統一錯誤格式，前端全局攔截
+
+Domain Model
+1. task:{
+id: Long,
+title: String,
+desc: String,
+status: TaskStatus,
+priotiry: Priority,
+createdAt: DateTime,
+updatedAt: DateTime,
+version: Long
+}
+
+Endpoints:
+1. GET	/api/v1/tasks	取得任務列表
+2. POST	/api/v1/tasks	建立任務	TaskCreateRequest
+3. GET	/api/v1/tasks/{id}	取得指定任務
+4. PUT	/api/v1/tasks/{id}	更新任務	TaskUpdateRequest
+5. PATCH	/api/v1/tasks/{id}/status	更新任務狀態	StatusUpdateRequest
+6. DELETE	/api/v1/tasks/{id}	刪除任務
+
+Enum
+1. TaskStatus: ['TODO','IN_PROGRESS','COMPLETED']
+2. Priority:['LOW','MEDIUM','HIGH']
+
+DTO
+1.
+TaskCreateRq:
+{
+  "title": String,
+  "description": String,
+  "priority": Priority(Enum)
+}
+
+2.
+TaskUpdateRq:
+{
+  "title":  String
+  "description": String,
+  "priority": Priority(Enum),
+  "version": String,
+}
+
+3.
+StatusUpdateRq:
+{
+  "status": TaskStatus(Enum),
+  "version": String,
+}
+
+4.
+TaskRs:
+{
+  "id": ,
+  "title": ,
+  "description": ,
+  "status": ,
+  "priority": ,
+  "createdAt": ,
+  "updatedAt": ,
+  "version": ,
+}
+
+ErrorRs:
+{
+  "timestamp": ,
+  "status": ,
+  "error": ,
+  "message": ,
+  "path": 
+}
+
+請根據以上文件內容，生成OpenAPI yaml設定檔後，生成後端程式碼
+下午4:57, 2026/9/16
+
+
+
+實作計畫已建立，請審閱後告訴我是否可以開始執行，或有任何需要調整的地方。
+Implementation Plan
+下午4:57, 2026/9/16
+
+Proceeded with
+Implementation Plan
+
+已啟動兩個平行子代理：
+* OpenAPI Spec Author — 建立 openapi.yaml
+* Spring Boot Backend Developer — 建立完整後端專案
+等待它們完成工作後，我會更新任務清單並驗證結果。
+
+
+✅ OpenAPI 規格檔已完成 — openapi.yaml 已建立，包含完整的 6 個 endpoint、5 個 schema、2 個 enum 定義。
+⏳ Spring Boot 後端 仍在建置中，等待完成...
+
+
+Code review subagent launched. Waiting for results before running the build...
+
+
+
+Waiting for the Gradle wrapper download to complete...
+
+
+
+Building the project with Gradle 9.7.1...
+
+
+✅ 實作完成！
+所有工作已完成，包含：
+1. OpenAPI 規格檔 — 完整的 openapi.yaml，定義 6 個 endpoint、5 個 schema、2 個 enum
+2. Spring Boot 3 後端 — 完整的專案結構，含 controller / service / repository / entity / DTO / exception handling
+3. Code Review 修正 — 修復了 4 個重要問題：
+    * 🔴 data.sql 執行順序導致啟動失敗
+    * 🔴 Optimistic Locking 邏輯在 managed entity 上無法正確偵測版本衝突
+    * 🟡 缺少 HttpMessageNotReadableException 等 400 錯誤處理
+    * 🟡 測試覆蓋率不足（7 → 12 tests）
+4. Build 驗證 — ./gradlew build 成功，12 個整合測試全數通過
+詳細內容請參閱 walkthrough。啟動後端可執行：
+bash
+
+
+cd backend && ./gradlew bootRun
