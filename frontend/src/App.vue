@@ -61,8 +61,8 @@ async function updateTask(id: number, payload: TaskRequest) {
       ElMessage.error('資料版本衝突，已重新載入')
       await fetchTasks()
     } else {
-      await fetchTasks()
       ElMessage.error('更新任務失敗')
+      await fetchTasks()
     }
   }
 }
@@ -98,6 +98,7 @@ async function toggleComplete(task: Task) {
       await fetchTasks()
     } else {
       ElMessage.error('更新完成狀態失敗')
+      await fetchTasks
     }
   } finally {
     updatingTaskIds.value.delete(task.id)
