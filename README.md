@@ -34,7 +34,7 @@
 ## REST API Endpoint
 
 | HTTP 方法 | 端點 (Endpoint) | 功能說明 |
-| :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- |
 | `GET` | `/api/v1/tasks` | 查詢任務列表 (支援 `completed` 篩選) |
 | `POST` | `/api/v1/tasks` | 建立新任務 |
 | `GET` | `/api/v1/tasks/{id}` | 查詢單一任務詳細資訊 |
