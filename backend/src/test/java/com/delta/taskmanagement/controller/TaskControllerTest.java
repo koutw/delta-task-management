@@ -45,7 +45,7 @@ public class TaskControllerTest {
         mockMvc.perform(get("/api/v1/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     @Test
@@ -88,10 +88,10 @@ public class TaskControllerTest {
 
     @Test
     public void testDeleteTask() throws Exception {
-        mockMvc.perform(delete("/api/v1/tasks/4"))
+        mockMvc.perform(delete("/api/v1/tasks/3"))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/v1/tasks/4"))
+        mockMvc.perform(get("/api/v1/tasks/3"))
                 .andExpect(status().isNotFound());
     }
 }
