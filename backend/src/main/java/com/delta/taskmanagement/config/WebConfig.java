@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -16,3 +17,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 }
+//[AI_assisted_001]

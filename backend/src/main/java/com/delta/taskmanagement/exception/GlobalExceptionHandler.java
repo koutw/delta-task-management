@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -85,3 +86,4 @@ public class GlobalExceptionHandler {
                 .build();
     }
 }
+//[AI_assisted_001]

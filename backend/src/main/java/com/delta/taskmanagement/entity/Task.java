@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.entity;
 
 import jakarta.persistence.*;
@@ -5,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tasks")
@@ -30,11 +31,15 @@ public class Task {
     private boolean completed = false;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
+
+    @Column(nullable = true)
+    private Instant expireAt;
 
     @Version
     private Long version;
 }
+//[AI_assisted_001]

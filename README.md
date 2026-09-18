@@ -9,6 +9,7 @@
         +String description
         +boolean completed
         +LocalDateTime createdAtgit
+        +LocalDateTime expireAt
         +LocalDateTime updatedAt
         +Long version
     }
@@ -32,12 +33,12 @@
 
 ## REST API Endpoint
 
-| HTTP 方法 | 端點 (Endpoint) | 功能說明 | 成功狀態碼 |
+| HTTP 方法 | 端點 (Endpoint) | 功能說明 |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/tasks` | 查詢任務列表 (支援 `completed` 篩選) | `200 OK` |
-| `POST` | `/api/v1/tasks` | 建立新任務 | `201 Created` |
-| `GET` | `/api/v1/tasks/{id}` | 查詢單一任務詳細資訊 | `200 OK` |
-| `PUT` | `/api/v1/tasks/{id}` | 更新任務內容與完成狀態 (含樂觀鎖驗證) | `200 OK` |
-| `DELETE` | `/api/v1/tasks/{id}` | 刪除指定任務 | `204 No Content` |
+| `GET` | `/api/v1/tasks` | 查詢任務列表 (支援 `completed` 篩選) |
+| `POST` | `/api/v1/tasks` | 建立新任務 |
+| `GET` | `/api/v1/tasks/{id}` | 查詢單一任務詳細資訊 |
+| `PUT` | `/api/v1/tasks/{id}` | 更新任務內容與完成狀態 | 
+| `DELETE` | `/api/v1/tasks/{id}` | 刪除指定任務 | 
 
 ---

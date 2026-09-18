@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Task Management API
-  description: 任務管理系統 RESTful API 規格文件 (Task Management System RESTful API Specification)
+  description: 任務管理系統 RESTful API 規格
   version: 1.0.0
 servers:
   - url: http://localhost:8080
@@ -187,6 +187,12 @@ components:
           type: boolean
           description: 任務是否已完成 (Task completion status)
           example: false
+        expireAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: 到期時間戳記 (Expiration timestamp in ISO-8601)
+          example: '2026-09-30T12:00:00Z'
         version:
           type: integer
           format: int64
@@ -227,6 +233,12 @@ components:
           format: date-time
           description: 建立時間 (Creation timestamp in ISO-8601)
           example: '2026-09-17T09:00:00Z'
+        expireAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: 到期時間 (Expiration timestamp in ISO-8601)
+          example: '2026-09-30T12:00:00Z'
         updatedAt:
           type: string
           format: date-time

@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.service;
 
 import com.delta.taskmanagement.dto.TaskRequest;
@@ -12,3 +13,4 @@ public interface TaskService {
     TaskResponse updateTask(Long id, TaskRequest request);
     void deleteTask(Long id);
 }
+//[AI_assisted_001]

@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement;
 
 import org.springframework.boot.SpringApplication;
@@ -9,3 +10,4 @@ public class DeltaTaskManagementApplication {
         SpringApplication.run(DeltaTaskManagementApplication.class, args);
     }
 }
+//[AI_assisted_001]

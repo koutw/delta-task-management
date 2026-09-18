@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.exception;
 
 import lombok.AllArgsConstructor;
@@ -18,3 +19,4 @@ public class ErrorResponse {
     private String message;
     private String path;
 }
+//[AI_assisted_001]

@@ -1,8 +1,11 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.Instant;
 
 @Data
 public class TaskRequest {
@@ -15,5 +18,8 @@ public class TaskRequest {
 
     private boolean completed = false;
 
+    private Instant expireAt;
+
     private Long version;
 }
+//[AI_assisted_001]

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ref, reactive, watch } from 'vue'
 import type { Task, TaskRequest } from '@/types/task'
 
 const props = defineProps<{
@@ -8,8 +8,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'submit-create', data: TaskRequest): void
-  (e: 'submit-update', id: number, data: TaskRequest): void
+  'submit-create': [data: TaskRequest]
+  'submit-update': [id: number, data: TaskRequest]
 }>()
 
 const visible = defineModel<boolean>({ default: false })
@@ -20,6 +20,7 @@ const formData = reactive({
   title: '',
   description: '',
   completed: false,
+  expireAt: '' as string | undefined,
   version: 0,
 })
 
@@ -38,12 +39,14 @@ watch(
       formData.title = task.title
       formData.description = task.description || ''
       formData.completed = task.completed
+      formData.expireAt = task.expireAt || undefined
       formData.version = task.version
     } else {
       formData.id = null
       formData.title = ''
       formData.description = ''
       formData.completed = false
+      formData.expireAt = undefined
       formData.version = 0
     }
     formRef.value?.clearValidate()
@@ -58,6 +61,7 @@ function handleConfirm() {
         title: formData.title.trim(),
         description: formData.description.trim() || undefined,
         completed: formData.completed,
+        expireAt: formData.expireAt || undefined,
         version: formData.version,
       }
 
@@ -89,7 +93,17 @@ function handleConfirm() {
           v-model="formData.description"
           type="textarea"
           :rows="3"
-          placeholder="請輸入任務詳細說明 (選填)"
+          placeholder="請輸入任務詳細說明"
+        />
+      </el-form-item>
+
+      <el-form-item label="到期時間" prop="expireAt">
+        <el-date-picker
+          v-model="formData.expireAt"
+          type="datetime"
+          placeholder="請選擇到期時間"
+          value-format="YYYY-MM-DDTHH:mm:ss[Z]"
+          style="width: 100%;"
         />
       </el-form-item>
 

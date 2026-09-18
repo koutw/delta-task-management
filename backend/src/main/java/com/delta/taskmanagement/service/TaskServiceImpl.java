@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.service;
 
 import com.delta.taskmanagement.dto.TaskRequest;
@@ -48,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .completed(request.isCompleted())
+                .expireAt(request.getExpireAt())
                 .build();
 
         Task savedTask = taskRepository.save(task);
@@ -69,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setCompleted(request.isCompleted());
+        task.setExpireAt(request.getExpireAt());
 
         Task updatedTask = taskRepository.saveAndFlush(task);
         return TaskResponse.fromEntity(updatedTask);
@@ -82,3 +85,4 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.delete(task);
     }
 }
+//[AI_assisted_001]

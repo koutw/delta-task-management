@@ -1,3 +1,4 @@
+//[AI_assisted_001]
 package com.delta.taskmanagement.controller;
 
 import com.delta.taskmanagement.dto.TaskRequest;
@@ -44,3 +45,4 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 }
+//[AI_assisted_001]
