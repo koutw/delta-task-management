@@ -1,1 +1,1 @@
-{"root":["./src/main.ts","./src/api/taskapi.ts","./src/types/task.ts","./src/app.vue","./src/components/layout/applayout.vue","./src/components/task/taskformdialog.vue","./src/components/task/tasktable.vue"],"version":"5.9.3"}
+{"root":["./src/main.ts","./src/api/taskapi.ts","./src/types/task.ts","./src/app.vue","./src/components/itinerary/itineraryview.vue","./src/components/layout/applayout.vue","./src/components/task/taskformdialog.vue","./src/components/task/tasktable.vue"],"version":"5.9.3"}

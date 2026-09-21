@@ -2,12 +2,15 @@
 import { ref, onMounted } from 'vue'
 import zhTw from 'element-plus/es/locale/lang/zh-tw'
 import { ElMessage } from 'element-plus'
+import { List, Calendar } from '@element-plus/icons-vue'
 import type { Task, TaskRequest } from '@/types/task'
 import { taskApi, HttpError } from '@/api/taskApi'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import TaskTable from '@/components/task/TaskTable.vue'
 import TaskFormDialog from '@/components/task/TaskFormDialog.vue'
+import ItineraryView from '@/components/itinerary/ItineraryView.vue'
 
+const activeTab = ref('tasks')
 const tasks = ref<Task[]>([])
 const selectedTask = ref<Task | null>(null)
 
@@ -67,6 +70,12 @@ async function updateTask(id: number, payload: TaskRequest) {
   }
 }
 
+async function toggleMultipleComplete(tasks: []) {
+  tasks.forEach(async(task) => {
+    await toggleComplete(task)
+  });
+}
+
 // 切換狀態
 async function toggleComplete(task: Task) {
   if (updatingTaskIds.value.has(task.id)) return
@@ -98,7 +107,7 @@ async function toggleComplete(task: Task) {
       await fetchTasks()
     } else {
       ElMessage.error('更新完成狀態失敗')
-      await fetchTasks
+      await fetchTasks()
     }
   } finally {
     updatingTaskIds.value.delete(task.id)
@@ -139,15 +148,36 @@ onMounted(() => {
 <template>
   <el-config-provider :locale="zhTw">
     <AppLayout>
-        <TaskTable
-          :tasks="tasks"
-          :loading="loading"
-          :is-updating="isUpdating"
-          @create-new-task="openCreateDialog"
-          @toggle="toggleComplete"
-          @edit="openEditDialog"
-          @delete="deleteTask"
-        />
+      <el-tabs v-model="activeTab" class="app-tabs">
+        <el-tab-pane name="tasks">
+          <template #label>
+            <span class="tab-label">
+              <el-icon><List /></el-icon>
+              <span>任務管理</span>
+            </span>
+          </template>
+          <TaskTable
+            :tasks="tasks"
+            :loading="loading"
+            :is-updating="isUpdating"
+            @create-new-task="openCreateDialog"
+            @toggle="toggleComplete"
+            @toggleMultiple="toggleMultipleComplete"
+            @edit="openEditDialog"
+            @delete="deleteTask"
+          />
+        </el-tab-pane>
+
+        <el-tab-pane name="itinerary">
+          <template #label>
+            <span class="tab-label">
+              <el-icon><Calendar /></el-icon>
+              <span>行程規劃</span>
+            </span>
+          </template>
+          <ItineraryView />
+        </el-tab-pane>
+      </el-tabs>
 
       <TaskFormDialog
         v-model="isDialogVisible"
@@ -158,3 +188,22 @@ onMounted(() => {
     </AppLayout>
   </el-config-provider>
 </template>
+
+<style scoped>
+.app-tabs :deep(.el-tabs__nav-wrap::after) {
+  height: 1px;
+  background-color: var(--el-border-color-light);
+}
+
+.app-tabs :deep(.el-tabs__header) {
+  margin-bottom: 20px;
+}
+
+.tab-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+}
+</style>

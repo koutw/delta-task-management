@@ -9,10 +9,15 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   toggle: [task: Task]
+  toggleMultiple: [tasks: []]
   edit: [task: Task]
   delete: [id: number]
   'create-new-task': []
 }>()
+
+const seletecTaskList = ref<[]>([])
+const selectable = (row: Task) => !row.completed
+
 
 const filterState = ref<'ALL' | 'COMPLETED' | 'INCOMPLETE'>('ALL')
 
@@ -21,6 +26,13 @@ const filteredTasks = computed(() => {
   if (filterState.value === 'INCOMPLETE') return props.tasks.filter(t => !t.completed)
   return props.tasks
 })
+
+function handleSelectionChange(seletecTasks: []) {
+  seletecTaskList.value = seletecTasks
+}
+function submitToggleMultiple() {
+  emit('toggleMultiple', seletecTaskList.value)
+}
 
 function formatDate(dateString?: string) {
   if (!dateString) return '-'
@@ -39,10 +51,17 @@ function formatDate(dateString?: string) {
         <el-radio-button value="INCOMPLETE">未完成</el-radio-button>
         <el-radio-button value="COMPLETED">已完成</el-radio-button>
       </el-radio-group>
+      <el-button v-show="seletecTaskList.length > 0" type="primary" @click="submitToggleMultiple">標記為完成</el-button>
+      <div>已選取任務數量：{{ seletecTaskList.length }}</div>
       <el-button type="primary" @click="emit('create-new-task')">新增任務</el-button>
     </div>
 
-    <el-table :data="filteredTasks" v-loading="loading" border stripe style="width: 100%;">
+    <el-table 
+      :data="filteredTasks" 
+      v-loading="loading"
+      @selection-change="handleSelectionChange" 
+      border stripe style="width: 100%;">
+      <el-table-column type="selection" :selectable="selectable" width="55" />
       <el-table-column label="完成" width="80" align="center">
         <template #default="{ row }">
           <el-switch

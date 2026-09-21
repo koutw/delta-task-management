@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>馬來西亞雙城遊手冊 - 檳城 & 吉隆坡</title>
+  <style>
+    :root {
+      --primary: #0F4C81;       /* 經典深海藍 */
+      --primary-light: #EBF3FA;
+      --secondary: #E35205;     /* 活力暖橘 */
+      --cal-blue: #003366;      /* 華航深藍 */
+      --bg: #F4F6F9;           /* 淺灰背景 */
+      --card-bg: #FFFFFF;
+      --text: #2D3748;
+      --text-muted: #718096;
+      --border: #E2E8F0;
+      --tag-must: #FFF5F5;
+      --tag-must-text: #E53E3E;
+      --tag-warn: #FFFAF0;
+      --tag-warn-text: #DD6B20;
+      --tag-info: #EBF8FF;
+      --tag-info-text: #3182CE;
+      --tag-green: #F0FFF4;
+      --tag-green-text: #2F855A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px 12px 60px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* 頂部橫幅 */
+    .header {
+      background: linear-gradient(135deg, var(--primary), #1A365D);
+      color: #fff;
+      padding: 24px 20px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(15, 76, 129, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::after {
+      content: "🇲🇾";
+      font-size: 80px;
+      position: absolute;
+      right: 15px;
+      bottom: -15px;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .header h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .header p {
+      font-size: 0.88rem;
+      opacity: 0.9;
+    }
+
+    /* 區塊標題 */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 24px 4px 12px;
+    }
+
+    .section-title span.badge {
+      font-size: 0.75rem;
+      background: #E2E8F0;
+      color: #4A5568;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    /* 醒目警示框 */
+    .alert-card {
+      background: #FFF5F5;
+      border: 1px solid #FEB2B2;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.88rem;
+      color: #9B2C2C;
+    }
+
+    /* 航班卡片 */
+    .flight-wrapper {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .flight-header {
+      background: #FAFAFA;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #4A5568;
+    }
+
+    .airline-tag {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .airline-tag.scoot {
+      background: #FFF9DB;
+      color: #744210;
+    }
+
+    .airline-tag.ci {
+      background: #EBF4FF;
+      color: #1A365D;
+      border: 1px solid #C3D9FF;
+    }
+
+    .flight-segment {
+      padding: 18px 18px 14px;
+    }
+
+    .flight-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .station-box {
+      text-align: left;
+    }
+
+    .station-box.right {
+      text-align: right;
+    }
+
+    .station-time {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1A202C;
+      line-height: 1.2;
+    }
+
+    .station-city {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #4A5568;
+    }
+
+    .station-airport {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .flight-path {
+      flex: 1;
+      padding: 0 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .flight-duration {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .flight-line {
+      height: 2px;
+      background: #CBD5E0;
+      position: relative;
+      margin: 6px 0;
+    }
+
+    .flight-line::after {
+      content: "✈";
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      transform: translate(50%, -55%);
+      background: #fff;
+      padding: 0 4px;
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .flight-subdetail {
+      font-size: 0.8rem;
+      color: #718096;
+      background: #F7FAFC;
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .layover-divider {
+      background: #FFFDF5;
+      border-top: 1px dashed #ECC94B;
+      border-bottom: 1px dashed #ECC94B;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #B7791F;
+      font-weight: 600;
+    }
+
+    .layover-pill {
+      background: #FEFCBF;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
+
+    /* 清單卡片 */
+    .item-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .checkbox-wrapper {
+      margin-top: 3px;
+    }
+
+    .custom-checkbox {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid #CBD5E0;
+      border-radius: 6px;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      background-color: #fff;
+      transition: all 0.2s;
+    }
+
+    .custom-checkbox:checked {
+      background-color: #38A169;
+      border-color: #38A169;
+    }
+
+    .custom-checkbox:checked::after {
+      content: "";
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .item-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #1A202C;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .tag.must { background: var(--tag-must); color: var(--tag-must-text); border: 1px solid #FED7D7; }
+    .tag.warn { background: var(--tag-warn); color: var(--tag-warn-text); border: 1px solid #FEEBC8; }
+    .tag.info { background: var(--tag-info); color: var(--tag-info-text); border: 1px solid #BEE3F8; }
+
+    .item-desc {
+      font-size: 0.88rem;
+      color: #4A5568;
+      margin-bottom: 6px;
+    }
+
+    .tip-box {
+      background: #F8FAFC;
+      border-left: 3px solid var(--primary);
+      padding: 6px 10px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.8rem;
+      color: #64748B;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- 頂部橫幅 -->
+    <header class="header">
+      <h1>馬來西亞旅遊手冊</h1>
+      <p>檳城美饌 ➔ 吉隆坡都會 5日遊 🇲🇾 2026.09.26 - 09.30</p>
+    </header>
+
+    <!-- 出發防呆提醒 -->
+    <div class="alert-card">
+      <div style="font-size: 1.3rem; line-height: 1;">⏰</div>
+      <div>
+        <strong>去程跨夜防呆提醒：</strong><br>
+        起飛時間為 <strong>09/26（六）00:55</strong>，請務必在 <strong>09/25（五）晚上 22:00～22:30</strong> 抵達桃園機場 T1 報到！
+      </div>
+    </div>
+
+    <!-- 區塊一：航班資訊 -->
+    <section>
+      <div class="section-title">
+        <span>🛫 航班資訊</span>
+        <span class="badge">雙點進出 Open-Jaw</span>
+      </div>
+
+      <!-- 去程卡片 -->
+      <div class="flight-wrapper">
+        <div class="flight-header">
+          <span>去程・2026 年 09 月 26 日（六）</span>
+          <span class="airline-tag scoot">🟡 酷航 Scoot 聯程 (N艙)</span>
+        </div>
+
+        <!-- TPE -> SIN -->
+        <div class="flight-segment">
+          <div class="flight-route">
+            <div class="station-box">
+              <div class="station-time">00:55</div>
+              <div class="station-city">台北 (TPE)</div>
+              <div class="station-airport">桃園國際機場 T1</div>
+            </div>
+            <div class="flight-path">
+              <div class="flight-duration">4h 25m</div>
+              <div class="flight-line"></div>
+              <div style="font-size: 0.7rem; color: #718096;">直飛</div>
+            </div>
+            <div class="station-box right">
+              <div class="station-time">05:20</div>
+              <div class="station-city">新加坡 (SIN)</div>
+              <div class="station-airport">樟宜機場 T1</div>
+            </div>
+          </div>
+          <div class="flight-subdetail">
+            <span>✈️ <strong>TR 875</strong> (Boeing 787-9 夢幻客機)</span>
+            <span>經濟艙 (N)</span>
+          </div>
+        </div>
+
+        <!-- 轉機等候 -->
+        <div class="layover-divider">
+          <span>⏳ 樟宜機場轉機 (T1 ➔ T1 同航廈)</span>
+          <span class="layover-pill">停留 3h 20m</span>
+        </div>
+
+        <!-- SIN -> PEN -->
+        <div class="flight-segment">
+          <div class="flight-route">
+            <div class="station-box">
+              <div class="station-time">08:40</div>
+              <div class="station-city">新加坡 (SIN)</div>
+              <div class="station-airport">樟宜機場 T1</div>
+            </div>
+            <div class="flight-path">
+              <div class="flight-duration">1h 25m</div>
+              <div class="flight-line"></div>
+              <div style="font-size: 0.7rem; color: #718096;">直飛</div>
+            </div>
+            <div class="station-box right">
+              <div class="station-time">10:05</div>
+              <div class="station-city">檳城 (PEN)</div>
+              <div class="station-airport">檳城國際機場 (國際航廈)</div>
+            </div>
+          </div>
+          <div class="flight-subdetail">
+            <span>✈️ <strong>TR 426</strong> (Airbus A321neo)</span>
+            <span>經濟艙 (N)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 回程卡片 -->
+      <div class="flight-wrapper">
+        <div class="flight-header">
+          <span>回程・2026 年 09 月 30 日（三）</span>
+          <span class="airline-tag ci">🌸 中華航空 China Airlines</span>
+        </div>
+
+        <!-- KUL -> TPE -->
+        <div class="flight-segment">
+          <div class="flight-route">
+            <div class="station-box">
+              <div class="station-time">14:45</div>
+              <div class="station-city">吉隆坡 (KUL)</div>
+              <div class="station-airport">吉隆坡國際機場 <strong>T1</strong></div>
+            </div>
+            <div class="flight-path">
+              <div class="flight-duration">4h 50m</div>
+              <div class="flight-line"></div>
+              <div style="font-size: 0.7rem; color: #718096;">直飛不中停</div>
+            </div>
+            <div class="station-box right">
+              <div class="station-time">19:35</div>
+              <div class="station-city">台北 (TPE)</div>
+              <div class="station-airport">桃園國際機場 T1</div>
+            </div>
+          </div>
+          <div class="flight-subdetail">
+            <span>✈️ <strong>CI 722</strong>（承運/銷售：華航）</span>
+            <span>艙等：H 艙 / 訂位：OK</span>
+            <span>🧳 託運行李：<strong>1PC (23kg)</strong></span>
+          </div>
+        </div>
+
+        <div style="padding: 10px 18px 14px; background: #FAFBFD; border-top: 1px solid var(--border); font-size: 0.82rem; color: #4A5568;">
+          💡 <strong>吉隆坡機場 (KLIA 1) 回程叮嚀：</strong><br>
+          • <strong>航廈確認</strong>：務必前往 <strong>Terminal 1（主航廈）</strong>，切勿走錯至廉航專用的 Terminal 2。<br>
+          • <strong>交通建議</strong>：吉隆坡中央車站（KL Sentral）搭機場快線 28 分鐘直達；搭 Grab 約需 50～60 分鐘（建議最晚 11:30 從市區出發，12:15 前抵達機場）。
+        </div>
+      </div>
+    </section>
+
+    <!-- 區塊二：行前準備與待辦清單 -->
+    <section>
+      <div class="section-title">
+        <span>📋 行前準備確認</span>
+        <span class="badge">出發前核對</span>
+      </div>
+
+      <!-- 護照 -->
+      <article class="item-card">
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="check-passport" class="custom-checkbox">
+        </div>
+        <div class="item-content">
+          <div class="item-header">
+            <label for="check-passport" class="item-title">📘 有效護照</label>
+            <span class="tag must">必備證件</span>
+          </div>
+          <div class="item-desc">
+            效期須在 <strong>6 個月以上</strong>（以返國日 2026/09/30 起算至少須到 2027/03/30），且有至少 1 頁空白頁。
+          </div>
+        </div>
+      </article>
+
+      <!-- 數位入境卡 MDAC -->
+      <article class="item-card">
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="check-mdac" class="custom-checkbox">
+        </div>
+        <div class="item-content">
+          <div class="item-header">
+            <label for="check-mdac" class="item-title">📱 數位入境卡（MDAC）</label>
+            <span class="tag must">強制填寫</span>
+          </div>
+          <div class="item-desc">
+            抵達檳城為 2026/09/26，請於 <strong>2026/09/24 ～ 09/26 期間</strong> 至移民局官網申請。
+          </div>
+          <div class="tip-box">
+            💡 填完後請將 PDF 確認單與 QR Code 截圖保存在手機相簿以供備查。
+          </div>
+        </div>
+      </article>
+
+      <!-- 轉接頭 -->
+      <article class="item-card">
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="check-adapter" class="custom-checkbox">
+        </div>
+        <div class="item-content">
+          <div class="item-header">
+            <label for="check-adapter" class="item-title">🔌 英式轉接頭 (Type G)</label>
+            <span class="tag warn">電氣規格</span>
+          </div>
+          <div class="item-desc">
+            當地電壓為 <strong>220V / 50Hz</strong>，插座為英式三孔方形插頭。手機與相機充電器通常適用，高功率電器（如吹風機）需確認電壓。
+          </div>
+        </div>
+      </article>
+
+      <!-- 檳城至吉隆坡交通預訂 -->
+      <article class="item-card">
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="check-intercity" class="custom-checkbox">
+        </div>
+        <div class="item-content">
+          <div class="item-header">
+            <label for="check-intercity" class="item-title">🚆/✈️ 檳城至吉隆坡交通預訂</label>
+            <span class="tag info">跨城交通</span>
+          </div>
+          <div class="item-desc">
+            本次行程為檳城進、吉隆坡出，需在兩城之間移動：
+            <ul style="padding-left: 18px; margin-top: 4px; font-size: 0.84rem;">
+              <li><strong>國內線航班</strong>（PEN ➔ KUL/SZB）：飛行約 1 小時（推薦 AirAsia、Firefly、Batik Air）。</li>
+              <li><strong>雙軌電動火車 ETS</strong>（北海 Butterworth ➔ 吉隆坡 KL Sentral）：車程約 4 小時，沿途風景優美、座位舒適。</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p>點擊核對框自動儲存進度 📌 祝馬來西亞雙城漫遊愉快！</p>
+    </footer>
+  </div>
+
+  <script>
+    // 勾選進度本地儲存（重新整理也不丟失）
+    document.querySelectorAll('.custom-checkbox').forEach(box => {
+      const saved = localStorage.getItem(box.id);
+      if (saved === 'true') box.checked = true;
+
+      box.addEventListener('change', () => {
+        localStorage.setItem(box.id, box.checked);
+      });
+    });
+  </script>
+</body>
+</html>
