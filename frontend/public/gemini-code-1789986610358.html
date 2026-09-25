@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>馬來西亞雙城遊手冊 - 檳城 & 吉隆坡</title>
+  <title>馬來西亞雙城旅遊手冊 - 檳城 & 吉隆坡</title>
   <style>
     :root {
       --primary: #0F4C81;       /* 經典深海藍 */
       --primary-light: #EBF3FA;
       --secondary: #E35205;     /* 活力暖橘 */
-      --cal-blue: #003366;      /* 華航深藍 */
-      --bg: #F4F6F9;           /* 淺灰背景 */
+      --accent-green: #2F855A;
+      --bg: #F4F6F9;           /* 柔和淺灰背景 */
       --card-bg: #FFFFFF;
       --text: #2D3748;
       --text-muted: #718096;
@@ -21,8 +21,14 @@
       --tag-warn-text: #DD6B20;
       --tag-info: #EBF8FF;
       --tag-info-text: #3182CE;
-      --tag-green: #F0FFF4;
-      --tag-green-text: #2F855A;
+      --tag-food: #FFF5F0;
+      --tag-food-text: #DD6B20;
+      --tag-spot: #F0FFF4;
+      --tag-spot-text: #276749;
+      --tag-bar: #FAF5FF;
+      --tag-bar-text: #6B46C1;
+      --tag-hotel: #EDF2F7;
+      --tag-hotel-text: #4A5568;
     }
 
     * {
@@ -87,7 +93,7 @@
       font-size: 1.2rem;
       font-weight: 700;
       color: var(--primary);
-      margin: 24px 4px 12px;
+      margin: 26px 4px 12px;
     }
 
     .section-title span.badge {
@@ -99,7 +105,7 @@
       font-weight: 600;
     }
 
-    /* 醒目警示框 */
+    /* 警示卡片 */
     .alert-card {
       background: #FFF5F5;
       border: 1px solid #FEB2B2;
@@ -113,6 +119,16 @@
       color: #9B2C2C;
     }
 
+    /* 卡片共用 */
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
     /* 航班卡片 */
     .flight-wrapper {
       background: var(--card-bg);
@@ -120,7 +136,7 @@
       border: 1px solid var(--border);
       box-shadow: 0 4px 12px rgba(0,0,0,0.03);
       overflow: hidden;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .flight-header {
@@ -140,40 +156,21 @@
       border-radius: 6px;
       font-weight: 700;
       font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
     }
+    .airline-tag.scoot { background: #FFF9DB; color: #744210; }
+    .airline-tag.ci { background: #EBF4FF; color: #1A365D; border: 1px solid #C3D9FF; }
 
-    .airline-tag.scoot {
-      background: #FFF9DB;
-      color: #744210;
-    }
-
-    .airline-tag.ci {
-      background: #EBF4FF;
-      color: #1A365D;
-      border: 1px solid #C3D9FF;
-    }
-
-    .flight-segment {
-      padding: 18px 18px 14px;
-    }
+    .flight-segment { padding: 16px 18px; }
 
     .flight-route {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    .station-box {
-      text-align: left;
-    }
-
-    .station-box.right {
-      text-align: right;
-    }
+    .station-box { text-align: left; }
+    .station-box.right { text-align: right; }
 
     .station-time {
       font-size: 1.35rem;
@@ -258,7 +255,7 @@
       font-size: 0.75rem;
     }
 
-    /* 清單卡片 */
+    /* 勾選清單卡片 */
     .item-card {
       background: var(--card-bg);
       border-radius: 14px;
@@ -271,9 +268,7 @@
       gap: 12px;
     }
 
-    .checkbox-wrapper {
-      margin-top: 3px;
-    }
+    .checkbox-wrapper { margin-top: 3px; }
 
     .custom-checkbox {
       appearance: none;
@@ -302,9 +297,7 @@
       transform: rotate(45deg) translate(-1px, -1px);
     }
 
-    .item-content {
-      flex: 1;
-    }
+    .item-content { flex: 1; }
 
     .item-header {
       display: flex;
@@ -327,29 +320,140 @@
       border-radius: 6px;
       font-weight: 600;
     }
-
     .tag.must { background: var(--tag-must); color: var(--tag-must-text); border: 1px solid #FED7D7; }
     .tag.warn { background: var(--tag-warn); color: var(--tag-warn-text); border: 1px solid #FEEBC8; }
     .tag.info { background: var(--tag-info); color: var(--tag-info-text); border: 1px solid #BEE3F8; }
+    .tag.food { background: var(--tag-food); color: var(--tag-food-text); border: 1px solid #FFD8A8; }
+    .tag.spot { background: var(--tag-spot); color: var(--tag-spot-text); border: 1px solid #C6F6D5; }
+    .tag.bar { background: var(--tag-bar); color: var(--tag-bar-text); border: 1px solid #E9D8FD; }
+    .tag.hotel { background: var(--tag-hotel); color: var(--tag-hotel-text); }
 
     .item-desc {
       font-size: 0.88rem;
       color: #4A5568;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .tip-box {
       background: #F8FAFC;
       border-left: 3px solid var(--primary);
-      padding: 6px 10px;
-      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.82rem;
+      color: #4A5568;
+      margin-top: 6px;
+    }
+
+    .tutorial-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EBF8FF;
+      color: #2B6CB0;
+      border: 1px solid #BEE3F8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* 時間軸排版 */
+    .timeline {
+      position: relative;
+      padding-left: 22px;
+      margin-top: 8px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: #E2E8F0;
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -22px;
+      top: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--primary);
+    }
+
+    .timeline-dot.highlight {
+      border-color: var(--secondary);
+      background: #FFF5F0;
+    }
+
+    .step-time {
       font-size: 0.8rem;
-      color: #64748B;
+      font-weight: 700;
+      color: var(--secondary);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1A202C;
+    }
+
+    .step-desc {
+      font-size: 0.88rem;
+      color: #4A5568;
+      line-height: 1.55;
+    }
+
+    /* 美食選單網格 */
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .option-subcard {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+    }
+
+    .option-subcard strong {
+      color: #1A202C;
+      font-size: 0.9rem;
     }
 
     .footer {
       text-align: center;
-      margin-top: 32px;
+      margin-top: 36px;
       font-size: 0.82rem;
       color: var(--text-muted);
     }
@@ -361,7 +465,7 @@
     <!-- 頂部橫幅 -->
     <header class="header">
       <h1>馬來西亞旅遊手冊</h1>
-      <p>檳城美饌 ➔ 吉隆坡都會 5日遊 🇲🇾 2026.09.26 - 09.30</p>
+      <p>檳城古蹟美饌 ➔ 吉隆坡都會 5日遊 🇲🇾 2026.09.26 - 09.30</p>
     </header>
 
     <!-- 出發防呆提醒 -->
@@ -387,7 +491,6 @@
           <span class="airline-tag scoot">🟡 酷航 Scoot 聯程 (N艙)</span>
         </div>
 
-        <!-- TPE -> SIN -->
         <div class="flight-segment">
           <div class="flight-route">
             <div class="station-box">
@@ -412,13 +515,11 @@
           </div>
         </div>
 
-        <!-- 轉機等候 -->
         <div class="layover-divider">
           <span>⏳ 樟宜機場轉機 (T1 ➔ T1 同航廈)</span>
           <span class="layover-pill">停留 3h 20m</span>
         </div>
 
-        <!-- SIN -> PEN -->
         <div class="flight-segment">
           <div class="flight-route">
             <div class="station-box">
@@ -451,7 +552,6 @@
           <span class="airline-tag ci">🌸 中華航空 China Airlines</span>
         </div>
 
-        <!-- KUL -> TPE -->
         <div class="flight-segment">
           <div class="flight-route">
             <div class="station-box">
@@ -471,16 +571,10 @@
             </div>
           </div>
           <div class="flight-subdetail">
-            <span>✈️ <strong>CI 722</strong>（承運/銷售：華航）</span>
-            <span>艙等：H 艙 / 訂位：OK</span>
+            <span>✈️ <strong>CI 722</strong>（華航承運）</span>
+            <span>艙等：H 艙</span>
             <span>🧳 託運行李：<strong>1PC (23kg)</strong></span>
           </div>
-        </div>
-
-        <div style="padding: 10px 18px 14px; background: #FAFBFD; border-top: 1px solid var(--border); font-size: 0.82rem; color: #4A5568;">
-          💡 <strong>吉隆坡機場 (KLIA 1) 回程叮嚀：</strong><br>
-          • <strong>航廈確認</strong>：務必前往 <strong>Terminal 1（主航廈）</strong>，切勿走錯至廉航專用的 Terminal 2。<br>
-          • <strong>交通建議</strong>：吉隆坡中央車站（KL Sentral）搭機場快線 28 分鐘直達；搭 Grab 約需 50～60 分鐘（建議最晚 11:30 從市區出發，12:15 前抵達機場）。
         </div>
       </div>
     </section>
@@ -519,10 +613,12 @@
             <span class="tag must">強制填寫</span>
           </div>
           <div class="item-desc">
-            抵達檳城為 2026/09/26，請於 <strong>2026/09/24 ～ 09/26 期間</strong> 至移民局官網申請。
+            抵達檳城為 2026/09/26，請於 <strong>2026/09/24 ～ 09/26 期間</strong> 至移民局官網申請完成。填完請將 PDF 確認單與 QR Code 截圖存手機相簿。
           </div>
-          <div class="tip-box">
-            💡 填完後請將 PDF 確認單與 QR Code 截圖保存在手機相簿以供備查。
+          <div>
+            <a href="https://ninetyroadtravel.com/malaysia/visa-3/" target="_blank" rel="noopener noreferrer" class="tutorial-link-btn">
+              📖 點此查看 MDAC 填寫步驟教學 (Ninety Road Travel) ↗
+            </a>
           </div>
         </div>
       </article>
@@ -538,34 +634,297 @@
             <span class="tag warn">電氣規格</span>
           </div>
           <div class="item-desc">
-            當地電壓為 <strong>220V / 50Hz</strong>，插座為英式三孔方形插頭。手機與相機充電器通常適用，高功率電器（如吹風機）需確認電壓。
-          </div>
-        </div>
-      </article>
-
-      <!-- 檳城至吉隆坡交通預訂 -->
-      <article class="item-card">
-        <div class="checkbox-wrapper">
-          <input type="checkbox" id="check-intercity" class="custom-checkbox">
-        </div>
-        <div class="item-content">
-          <div class="item-header">
-            <label for="check-intercity" class="item-title">🚆/✈️ 檳城至吉隆坡交通預訂</label>
-            <span class="tag info">跨城交通</span>
-          </div>
-          <div class="item-desc">
-            本次行程為檳城進、吉隆坡出，需在兩城之間移動：
-            <ul style="padding-left: 18px; margin-top: 4px; font-size: 0.84rem;">
-              <li><strong>國內線航班</strong>（PEN ➔ KUL/SZB）：飛行約 1 小時（推薦 AirAsia、Firefly、Batik Air）。</li>
-              <li><strong>雙軌電動火車 ETS</strong>（北海 Butterworth ➔ 吉隆坡 KL Sentral）：車程約 4 小時，沿途風景優美、座位舒適。</li>
-            </ul>
+            馬來西亞與新加坡電壓為 <strong>220V / 50Hz</strong>，插頭為英式三孔扁平型。手機/相機充電器支援通用電壓，高功率電器（吹風機）需確認電壓。
           </div>
         </div>
       </article>
     </section>
 
+    <!-- 區塊三：住宿安排 -->
+    <section>
+      <div class="section-title">
+        <span>🏨 住宿資訊</span>
+        <span class="badge">檳城 2 晚</span>
+      </div>
+
+      <div class="card">
+        <div class="item-header">
+          <h3 class="item-title" style="font-size: 1.05rem;">St. Giles Wembley Penang Hotel</h3>
+          <span class="tag hotel">檳城溫布利吉客思酒店</span>
+        </div>
+        <p style="font-size: 0.85rem; color: #718096; margin-bottom: 8px;">
+          📅 入住時間：<strong>2026/09/26（六）～ 09/28（一），共 2 晚</strong>
+        </p>
+        <div class="tip-box">
+          📍 <strong>核心地理位置優勢：</strong><br>
+          • 位於喬治市中心，緊鄰<strong>光大（Komtar）</strong>、1st Avenue Mall，斜對面即是 <strong>Gama 百貨超市</strong>。<br>
+          • 換錢所 (HME)、昌隆咖啡館、三條路888福建麵均在步行 3～8 分鐘範圍內！
+        </div>
+      </div>
+    </section>
+
+    <!-- 區塊四：Day 1 完整行程指南 -->
+    <section>
+      <div class="section-title">
+        <span>🗓️ Day 1 精彩行程 (09/26 週六)</span>
+        <span class="badge">檳城初見・美食探索</span>
+      </div>
+
+      <div class="card">
+        <div class="timeline">
+
+          <!-- 1. 機場 -> 放行李 & 換錢 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">10:05 - 12:00</div>
+            <div class="step-header">
+              <span class="step-title">1. 抵達 ➔ 飯店放行李 ➔ 光大換錢</span>
+              <span class="tag info">手續必辦</span>
+            </div>
+            <div class="step-desc">
+              • <strong>10:05</strong> 降落檳城機場 (PEN)，通關提領行李，開啟上網。<br>
+              • <strong>11:00</strong> 機場搭 Grab 直達 <strong>St. Giles Wembley</strong>（約 25 分鐘，約 RM 22～28），先至櫃台寄放行李。<br>
+              • <strong>11:40</strong> 步行 3 分鐘至光大商場外圍的 <strong>Hasani Munawarah Exchange (HME)</strong> 用千元台幣新鈔換馬幣 (MYR)。
+            </div>
+          </div>
+
+          <!-- 2. 昌隆南洋咖啡館 -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">12:15 - 13:15</div>
+            <div class="step-header">
+              <span class="step-title">2. 昌隆南洋咖啡館 Chang Leong Coffee 吃早餐/早午茶</span>
+              <span class="tag food">南洋風味</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>2-A, Lebuh McNair（從光大/飯店走過去僅約 5 分鐘！）。<br>
+              • <strong>推薦必點：</strong>古早味炭烤加椰牛油吐司、生熟蛋滴醬油胡椒、經典香濃南洋咖啡（Kopi）或美祿、檳城椰漿飯。
+            </div>
+          </div>
+
+          <!-- 3. 壁畫街 & 姓周橋 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">13:30 - 15:15</div>
+            <div class="step-header">
+              <span class="step-title">3. 喬治市壁畫街 ➔ 姓周橋水上聚落</span>
+              <span class="tag spot">世界文化遺產</span>
+            </div>
+            <div class="step-desc">
+              • <strong>交通：</strong>搭 Grab 約 5 分鐘直達本頭公巷（Lebuh Armenian）。<br>
+              • <strong>打卡壁畫：</strong>經典《姊弟共騎》壁畫、鐵線漫畫裝置。<br>
+              • <strong>姓周橋 (Chew Jetty)：</strong>沿著本頭公巷往海墘街方向走到底即可抵達。漫步在百年水上高腳木屋聚落，吹吹海風。
+            </div>
+          </div>
+
+          <!-- 4. 三條路888福建麵 -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">15:30 - 16:30</div>
+            <div class="step-header">
+              <span class="step-title">4. 三條路 888 福建麵 (888 Hokkien Mee)</span>
+              <span class="tag food">米其林推薦</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>67-A, Lebuh Presgrave。從姓周橋搭 Grab 約 6 分鐘。<br>
+              • ⏰ <strong>營業時間提醒：</strong>下午 <strong>15:00 / 15:30 才開始營業</strong>，剛好銜接剛出爐的第一鍋鮮蝦濃湯！<br>
+              • <strong>推薦吃法：</strong>麵混米粉（黃麵+米粉），<strong>必加配料：脆皮燒肉、排骨、滷蛋、粉腸</strong>。
+            </div>
+          </div>
+
+          <!-- 5. 回飯店休息 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">16:30 - 17:45</div>
+            <div class="step-header">
+              <span class="step-title">5. 回飯店辦理入住 ＆ 午後補眠小歇</span>
+              <span class="tag hotel">休息充電</span>
+            </div>
+            <div class="step-desc">
+              • 吃完 888 福建麵後，<strong>步行約 6 分鐘即可走回 St. Giles Wembley Hotel</strong>！<br>
+              • 正式辦理 Check-in 進房、沖涼，避開午後悶熱，為晚上的高空景觀與美食蓄滿體力。
+            </div>
+          </div>
+
+          <!-- 6. 光大廣場觀景台 (The Top) -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">18:00 - 19:30</div>
+            <div class="step-header">
+              <span class="step-title">6. 光大廣場觀景台 The Top (Rainbow Skywalk)</span>
+              <span class="tag spot">檳城最高地標</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>隔壁光大巨塔（Komtar），步行 2 分鐘直達。<br>
+              • 登上 68 樓彩虹天空步道，剛好飽覽「日景 ➔ 日落夕陽（約 19:15）➔ 璀璨百萬夜景」，走在透明懸空玻璃步道上超震撼！
+            </div>
+          </div>
+
+          <!-- 7. Gama Supermarket 採買 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">19:40 - 20:20</div>
+            <div class="step-header">
+              <span class="step-title">7. Gama 超市百貨 (GAMA Supermarket) 採購</span>
+              <span class="tag spot">伴手禮 & 補給</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>位於 St. Giles Wembley 飯店正對面。<br>
+              • 老字號平價百貨超市，採買房內享用的南洋水果（山竹、紅毛丹、芒果）、礦泉水，或物色白咖啡與伴手禮。
+            </div>
+          </div>
+
+          <!-- 8. 晚餐精選 -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">20:30 之後</div>
+            <div class="step-header">
+              <span class="step-title">8. 晚餐精選（4 大口碑名店任選）</span>
+              <span class="tag food">深夜美饌</span>
+            </div>
+            <div class="step-desc">
+              放好超市戰利品後，根據今晚的胃口選擇一間心儀的美食：
+              <div class="option-grid">
+                <div class="option-subcard">
+                  <strong>🍜 滿茿咖喱麵館 Manzu Curry Noodle House</strong><br>
+                  • 地點：Jalan Krian（步行 5 分鐘即達）。<br>
+                  • 特色：精緻濃郁的吉隆坡/檳城系咖哩湯頭，招牌「脆皮燒肉咖哩麵」、「海鮮咖哩麵」，用料豐富奢華！
+                </div>
+                <div class="option-subcard">
+                  <strong>🦆 Super Star Koay Teow Soup 天皇粿條湯</strong><br>
+                  • 地點：Lebuh Kimberley（汕頭街夜市路口 / Jalan Sungai Ujong 門市）。<br>
+                  • 特色：米其林指南入選！炭火燉煮超過半世紀，必點「招牌粿條湯」配入口即化的「秘製滷雞腳、滷全雞腿、滷蛋、粉腸」。
+                </div>
+                <div class="option-subcard">
+                  <strong>🍷 GILDA (Lorong Soo Hong)</strong><br>
+                  • 地點：81, Lorong Soo Hong（近壁畫街，Grab 5 分鐘）。<br>
+                  • 特色：老倉庫改造的高質感當代餐酒館（Neo-Bistro），氛圍極佳！推薦鮮蝦義大利麵（Prawn Linguine）、酸種麵包配洋蔥慕斯與特調雞尾酒。
+                </div>
+                <div class="option-subcard">
+                  <strong>🥘 Rongs (Georgetown) 蓉食</strong><br>
+                  • 地點：217, Lebuh Pantai（海墘街）。<br>
+                  • 特色：新潮極有質感的復古 Cafe 煮炒店，必點咖哩石斑魚頭、順德乾蒸菜系列與蒜苔梅花肉，鑊氣十足超下飯！
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 區塊五：Day 2 完整行程指南 -->
+    <section>
+      <div class="section-title">
+        <span>🗓️ Day 2 精彩行程 (09/27 週日)</span>
+        <span class="badge">山巒俯瞰・咖啡巡禮・海岸火舞</span>
+      </div>
+
+      <div class="card">
+        <div class="timeline">
+
+          <!-- 1. Sweetbar Cafe -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">08:30 - 09:30</div>
+            <div class="step-header">
+              <span class="step-title">1. Sweetbar Cafe 晨光精品咖啡</span>
+              <span class="tag food">質感咖啡</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>38B, Lebuh Tye Sin（三條路，從飯店步行約 5 分鐘）。<br>
+              • <strong>亮點：</strong>檳城極受好評的自家烘焙專門店，以精湛手沖單品咖啡、拿鐵與精緻可口的每日烘焙蛋糕聞名。在舒適靜謐的空間享用晨光咖啡，為登山前儲備好心情。
+            </div>
+          </div>
+
+          <!-- 2. 升旗山 -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">09:45 - 12:30</div>
+            <div class="step-header">
+              <span class="step-title">2. 升旗山 (Penang Hill) 避暑俯瞰全島</span>
+              <span class="tag spot">自然生態</span>
+            </div>
+            <div class="step-desc">
+              • <strong>交通：</strong>從市區叫 Grab 直達升旗山纜車站（Penang Hill Lower Station），車程約 20 分鐘。<br>
+              • <strong>必玩體驗：</strong>搭乘急速穿梭於熱帶雨林的百年纜車直達山頂（車程約 5 分鐘）；山頂氣溫約 21~25°C 極為舒適！可在觀景台眺望喬治市與兩座跨海大橋，漫步英國殖民時代老別墅或體驗 The Habitat 生態吊橋步道。
+            </div>
+          </div>
+
+          <!-- 3. 午餐 (新文記 vs Maga) -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">13:00 - 14:30</div>
+            <div class="step-header">
+              <span class="step-title">3. 午餐名店 2 選 1 (日落洞美食特區)</span>
+              <span class="tag food">道地午宴</span>
+            </div>
+            <div class="step-desc">
+              從升旗山搭 Grab 約 15 分鐘前往日落洞（Jelutong）享用特色午餐：
+              <div class="option-grid">
+                <div class="option-subcard">
+                  <strong>☕ 新文記咖啡體驗館 SBK Coffee Concept Store</strong><br>
+                  • 地點：348, Jalan Jelutong。<br>
+                  • 特色：檳城一甲子老字號烘焙咖啡館打造的摩登旗艦店！必體驗濃郁滑順的「招牌傳統牛油咖啡（Butter Coffee）」配海南雞扒、砂煲老鼠粉與香烤咖椰吐司。
+                </div>
+                <div class="option-subcard">
+                  <strong>🥢 美嘉茶餐室 Maga Restaurant</strong><br>
+                  • 地點：Perak Road 與 Van Praagh Road 交叉口。<br>
+                  • 特色：在地人深愛的老牌小販中心，榮獲「檳城小販天王大賽」的冠軍級「咖哩麵（配特製鮮魷）」、焦香酥脆的「傳統蠔煎（煎蠔烙）」與清甜板麵！
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. 回飯店休息 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">15:00 - 17:00</div>
+            <div class="step-header">
+              <span class="step-title">4. 回飯店吹冷氣小歇 ＆ 充電</span>
+              <span class="tag hotel">充沛精力</span>
+            </div>
+            <div class="step-desc">
+              • 搭 Grab 回 St. Giles Wembley Hotel 休息、午睡、整理上午在升旗山拍的美照。<br>
+              • 避開午後最炙熱的紫外線，為晚上的海灘酒吧火舞之夜做足準備！
+            </div>
+          </div>
+
+          <!-- 5. 晚餐時光 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="step-time">17:30 - 19:00</div>
+            <div class="step-header">
+              <span class="step-title">5. 晚餐時光（市區先吃 or 直奔海灘餐廳）</span>
+              <span class="tag food">美味晚餐</span>
+            </div>
+            <div class="step-desc">
+              • <strong>彈性方案 A（市區先吃）：</strong>可在飯店周邊品嚐昨日未吃到的名店（如 888 附近的汕頭街熟食或海南雞飯）。<br>
+              • <strong>彈性方案 B（直奔丹絨武雅海濱用餐）：</strong>提早於 17:30 搭 Grab 前往丹絨武雅，在海灘周邊的海鮮餐廳（如 Sunshine Bay Seafood）享用海鮮大餐，再步入酒吧。
+            </div>
+          </div>
+
+          <!-- 6. Laguna Bay Beach Bar 看火舞 -->
+          <div class="timeline-step">
+            <div class="timeline-dot highlight"></div>
+            <div class="step-time">19:30 - 22:00</div>
+            <div class="step-header">
+              <span class="step-title">6. Laguna Bay Beach Bar Penang 看超震撼火舞表演</span>
+              <span class="tag bar">海灘酒吧 ＆ 火舞</span>
+            </div>
+            <div class="step-desc">
+              • <strong>地點：</strong>527, Jalan Tanjung Bunga（Rainbow Paradise Beach Resort 後方沙灘，從市區搭 Grab 約 20～25 分鐘）。<br>
+              • 🔥 <strong>週日特別火舞秀（Ultimate Fire Show）：</strong>每週五至週日有最精彩火舞！表演時間通常約在 <strong>20:30 ～ 21:00</strong> 開始，赤足踩在細軟沙灘上，近距離感受舞者揮舞火球、噴火與火花四濺的視覺震撼！<br>
+              • 點杯冰涼的熱帶調酒或生啤，吹著海風聽音樂，是檳城夜晚最難忘的愜意享受。結束後搭 Grab 悠閒回飯店。
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <footer class="footer">
-      <p>點擊核對框自動儲存進度 📌 祝馬來西亞雙城漫遊愉快！</p>
+      <p>點擊核對框自動儲存進度 📌 祝檳城之旅行程順利、美食吃飽飽！</p>
     </footer>
   </div>
 
